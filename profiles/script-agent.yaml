@@ -1,0 +1,37 @@
+# Fragment: script-agent
+
+profile: script-agent
+
+description: >
+  ScriptAgent — đọc topic XAUUSD/gold điểm cao nhất, viết trading-signal script
+  (macro catalyst hoặc technical setup, key levels, trade plan). Stage: SCRIPT.
+
+model:
+  default: deepseek/deepseek-chat
+
+toolsets:
+  - terminal
+
+skills:
+  - content-pipeline-script
+  - content-pipeline-kanban
+  # Phase 2+ — Supabase agent skill (vendor)
+
+memory:
+  enabled: true
+
+env:
+  - SUPABASE_URL
+  - SUPABASE_SERVICE_ROLE_KEY
+
+kanban:
+  assignee_name: script-agent
+  stage: SCRIPT
+  blocked_by: research
+
+permissions:
+  supabase_read: [topics, pipeline_runs]
+  supabase_write: [scripts]
+  forbidden: [topics, x_posts]
+
+contract: docs/AGENT-OS.md#9-scriptagent

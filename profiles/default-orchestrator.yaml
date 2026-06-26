@@ -1,0 +1,32 @@
+# Fragment: default profile (orchestrator / cron seeder)
+# Profile default thường đã tồn tại sau deploy Railway — chỉ bổ sung toolsets + skills.
+
+profile: default
+
+description: >
+  Orchestrator — nhận lệnh Telegram/cron, seed Kanban card graph,
+  không làm việc fulfillment. Dùng pipeline-seeder skill.
+
+model:
+  default: deepseek/deepseek-chat
+
+toolsets:
+  - terminal
+  - kanban
+
+skills:
+  - pipeline-seeder
+  - content-pipeline-kanban
+
+memory:
+  enabled: true
+
+cron:
+  # Phase 7 — Hermes tạo entry khi operator gửi prompt weekly-cron-setup
+  expected: "0 7 * * 1"
+  timezone: America/New_York
+
+env:
+  - TELEGRAM_BOT_TOKEN
+
+contract: docs/AGENT-OS.md#3-orchestration-design

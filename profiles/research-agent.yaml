@@ -1,0 +1,45 @@
+# Fragment: research-agent
+# Merge vào ~/.hermes/profiles/research-agent/ hoặc /data/profiles/research-agent/
+# Tạo profile trước: hermes profile create research-agent --description "..."
+
+profile: research-agent
+
+description: >
+  ResearchAgent — tìm chủ đề forex/gold/XAUUSD trending qua TinyFish, chấm điểm virality 1-100,
+  audience forex-gold-signals, ghi Supabase bảng topics. Stage Kanban: RESEARCH.
+
+model:
+  default: deepseek/deepseek-chat
+  # Thay bằng provider bạn dùng, ví dụ: openrouter/anthropic/claude-sonnet-4
+
+toolsets:
+  - terminal
+  - web
+
+# Worker nhận kanban_* tự động khi dispatcher spawn (_KANBAN_TASK).
+# Không cần liệt kê kanban ở đây trừ khi profile tự tạo task.
+
+skills:
+  # Phase 3 — copy từ repo/skills/
+  - content-pipeline-research
+  - content-pipeline-kanban
+  - use-tinyfish
+
+memory:
+  enabled: true
+  # Namespace riêng — không dùng memory thay Supabase
+
+env:
+  # Chỉ trên host Railway — không commit file .env
+  - TINYFISH_API_KEY
+
+kanban:
+  assignee_name: research-agent
+  stage: RESEARCH
+
+permissions:
+  supabase_write: [topics]
+  supabase_read: [pipeline_runs]
+  forbidden: [scripts, x_posts, pipeline_runs.status]
+
+contract: docs/AGENT-OS.md#8-researchagent

@@ -1,0 +1,150 @@
+---
+name: content-pipeline-research
+description: Research trending forex/gold/XAUUSD topics via TinyFish, score virality 1-100, save to Supabase topics table. Use when assigned a Kanban research card in the Hermes content pipeline.
+---
+
+# Research Agent Skill
+
+Hermes profile: `research-agent` · Pipeline stage: **RESEARCH**
+
+Contract: [docs/AGENT-OS.md §8](../../docs/AGENT-OS.md)
+
+---
+
+## Purpose
+
+Find trending **forex / gold (XAUUSD) / trading signal** topics for the `forex-gold-signals` audience using **live TinyFish search** (not LLM invention), score each 1–100 for content virality, and persist ranked rows to Supabase `topics`.
+
+Domain config: [content.yaml](../../content.yaml)
+
+---
+
+## Inputs
+
+| Input | Source | Required |
+|-------|--------|----------|
+| Kanban task id | `_KANBAN_TASK` env | Yes |
+| Task body | `kanban_show()` | Yes |
+| `pipeline_run_id` | Card metadata | Yes |
+| Topic count | Task body (default: 5) | Yes |
+| Audience | Task body (default: `forex-gold-signals`) | No |
+| Search queries | Task body or [content.yaml](../../content.yaml) defaults | Yes |
+
+**Default query themes:** `XAUUSD gold forecast`, `gold technical analysis breakout`, `forex gold macro catalyst`, `XAUUSD key levels support resistance`, `gold trading signal trending`
+
+---
+
+## Outputs
+
+| Output | Destination |
+|--------|-------------|
+| `topics` rows (≥ target count) | Supabase |
+| `pipeline_runs.started_at` | Supabase (first insert) |
+| Progress comments | Kanban `kanban_comment` |
+| Summary line | `kanban_complete --result` |
+
+**Result line format:** `top: {title} score={n} topics={count}`
+
+---
+
+## Dependencies
+
+| Dependency | Type |
+|------------|------|
+| TinyFish `use-tinyfish` skill | Hermes skill (vendor) |
+| Supabase agent skill | Hermes skill (vendor) |
+| `pipeline_runs` row | Seeded before research |
+| Kanban card `research:{run_id}` | Assigned to this profile |
+
+**Does not depend on:** script, x-optimize, or storage cards.
+
+---
+
+## Workflow
+
+```text
+kanban_show → confirm pipeline_run_id
+→ TinyFish search (parallel queries)
+→ score each result 1-100 with cited evidence
+→ INSERT topics (idempotent on pipeline_run_id + title)
+→ kanban_complete
+```
+
+### TinyFish decision tree
+
+1. **search** — discover topics, trends, titles, URLs
+2. **fetch_content** — deepen scoring for top 3 candidates only
+3. Never use TinyFish `agent`/browser unless task body explicitly requests
+
+---
+
+## Examples
+
+### Example task body
+
+```text
+Find 5 trending forex/gold/XAUUSD topics for audience forex-gold-signals.
+Score each 1-100 for virality. Save to topics table for pipeline_run_id {uuid}.
+Exclude generic AI automation topics.
+Mark done when finished.
+```
+
+### Example `topics` row
+
+```json
+{
+  "pipeline_run_id": "abc-123",
+  "title": "Gold Forecast, News and Analysis (XAU/USD) - FXStreet",
+  "trending_score": 95,
+  "audience": "forex-gold-signals",
+  "source_urls": ["https://...", "https://..."]
+}
+```
+
+### Example kanban_comment sequence
+
+```text
+start: RESEARCH t_research_01
+tinyfish: search 3 queries → 24 results
+tinyfish: fetch top 3 → scoring complete
+supabase: inserted 5 topics
+```
+
+---
+
+## Failure cases
+
+| Failure | Detection | Action |
+|---------|-----------|--------|
+| TinyFish timeout/429 | API error | Retry up to 3× (30s, 60s, 120s backoff); comment each retry |
+| Empty search results | 0 usable hits | Widen query once; then `kanban_block` |
+| < 3 topics after retries | Count check | `kanban_block` — insufficient research |
+| RLS insert denied | Supabase error | `kanban_block` — no retry |
+| Missing pipeline_run_id | Metadata check | `kanban_block` — config error |
+| Duplicate title | Unique constraint | Skip row; continue |
+
+---
+
+## Testing checklist
+
+- [ ] `kanban_show()` returns research card assigned to this profile
+- [ ] TinyFish search returns real URLs in `source_urls`
+- [ ] ≥ 5 `topics` rows for test run
+- [ ] `trending_score` between 1 and 100
+- [ ] Top topic score ≥ 70 on live run
+- [ ] No invented URLs (spot-check 2 sources)
+- [ ] `kanban_complete` result line matches format
+- [ ] Research card `done` before script card promotes to `ready`
+- [ ] Retry: kill worker mid-run → reclaim completes without duplicate topics
+
+---
+
+## Documentation
+
+| Reference | Path |
+|-----------|------|
+| Agent contract | [docs/AGENT-OS.md §8](../../docs/AGENT-OS.md) |
+| SOP | [knowledge/sops/SOP-03-research-agent.md](../../knowledge/sops/SOP-03-research-agent.md) |
+| Config prompt | [knowledge/prompts/research-agent-config.md](../../knowledge/prompts/research-agent-config.md) |
+| DB ownership | [docs/AGENT-OS.md §7](../../docs/AGENT-OS.md) |
+| TinyFish install | [skills/INSTALL.md](../INSTALL.md) |

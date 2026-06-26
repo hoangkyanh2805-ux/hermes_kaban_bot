@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hermes-content-os/schemas/pipeline_run.json",
+  "title": "pipeline_runs",
+  "description": "One row per weekly or manual Kanban root run.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "trigger", "status", "created_at"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "trigger": {
+      "type": "string",
+      "enum": ["manual", "cron"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "running", "completed", "partial", "failed"]
+    },
+    "stage": {
+      "type": ["string", "null"]
+    },
+    "kanban_root_task_id": {
+      "type": ["string", "null"]
+    },
+    "topics_researched": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0
+    },
+    "topics_produced": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0
+    },
+    "packages_produced": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0
+    },
+    "error_summary": {
+      "type": ["string", "null"]
+    },
+    "started_at": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "completed_at": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

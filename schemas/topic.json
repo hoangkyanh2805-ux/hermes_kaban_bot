@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hermes-content-os/schemas/topic.json",
+  "title": "topics",
+  "description": "Research output row — TinyFish citations in source_urls.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "pipeline_run_id", "title", "source_urls", "created_at"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "pipeline_run_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "trending_score": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "maximum": 100
+    },
+    "audience": {
+      "type": ["string", "null"]
+    },
+    "source_urls": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

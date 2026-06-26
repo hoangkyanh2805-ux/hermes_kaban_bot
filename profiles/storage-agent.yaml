@@ -1,0 +1,36 @@
+# Fragment: storage-agent
+
+profile: storage-agent
+
+description: >
+  StorageAgent — đối soát Kanban vs Supabase, chốt pipeline_runs.status.
+  Chạy cuối cùng sau tất cả x-optimize (fan-in). Stage: STORAGE.
+
+model:
+  default: deepseek/deepseek-chat
+
+toolsets:
+  - terminal
+
+skills:
+  - content-pipeline-storage
+  - content-pipeline-kanban
+
+memory:
+  enabled: true
+
+env:
+  - SUPABASE_URL
+  - SUPABASE_SERVICE_ROLE_KEY
+
+kanban:
+  assignee_name: storage-agent
+  stage: STORAGE
+  blocked_by: x-optimize-all-siblings
+
+permissions:
+  supabase_read: [topics, scripts, x_posts, pipeline_runs]
+  supabase_write: [pipeline_runs]
+  forbidden: [delete_any, topics.content, scripts.content, x_posts.content]
+
+contract: docs/AGENT-OS.md#11-storageagent

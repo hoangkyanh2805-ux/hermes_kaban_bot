@@ -1,0 +1,69 @@
+# Hermes Content Pipeline — domain config (source of truth)
+# Agents read via skills / prompts referencing this file. No secrets here.
+
+audience:
+  primary: forex-gold-signals
+  label: "Forex / Gold (XAUUSD) traders seeking actionable signals"
+  description: >
+    Active traders and signal followers interested in XAUUSD, macro catalysts,
+    technical setups, and trade plans — not generic AI automation content.
+
+research:
+  topic_count_default: 5
+  packages_produced_default: 2
+  search_queries:
+    - "XAUUSD gold price forecast trending"
+    - "gold technical analysis XAU USD breakout"
+    - "forex gold news macro catalyst today"
+    - "XAUUSD support resistance key levels"
+    - "gold trading signal X twitter trending"
+  exclude_topics:
+    - "generic AI automation"
+    - "no-code SaaS unless tied to trading tools"
+  tinyfish:
+    prefer_sources:
+      - fxstreet.com
+      - investing.com
+      - forexfactory.com
+      - x.com
+  topics_row:
+    audience_field: "forex-gold-signals"
+
+script:
+  format: trading-signal
+  structure_sections:
+    - macro_catalyst_or_setup
+    - key_levels
+    - trade_plan
+    - risk_note
+  voice: "confident, data-backed, trader-to-trader — not financial advice disclaimer in every line"
+
+x_optimizer:
+  thread_template:
+    - index: 0
+      role: hook
+      rules: "Price action hook, no URLs, ≤280 chars ideal"
+    - index: 1
+      role: source_link
+      rules: "Original article or chart source URL"
+    - index: 2
+      role: analysis
+      rules: "Key levels, pattern, or macro read"
+    - index: 3
+      role: cta
+      rules: "Question or trade-plan CTA for replies"
+  niche_hashtags_optional:
+    - XAUUSD
+    - Gold
+    - Forex
+
+pipeline:
+  board_slug: content-os
+  weekly_cron: "0 7 * * 1"
+  timezone: Asia/Ho_Chi_Minh
+
+agents:
+  research: research-agent
+  script: script-agent
+  x_optimizer: x-optimizer-agent
+  storage: storage-agent

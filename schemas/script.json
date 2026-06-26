@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hermes-content-os/schemas/script.json",
+  "title": "scripts",
+  "description": "Video script artifact — one row per topic.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "topic_id", "status", "created_at"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "topic_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "full_script": {
+      "type": ["string", "null"]
+    },
+    "structure": {
+      "type": ["object", "null"],
+      "additionalProperties": true
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "final"],
+      "default": "draft"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

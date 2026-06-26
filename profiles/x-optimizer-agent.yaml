@@ -1,0 +1,39 @@
+# Fragment: x-optimizer-agent
+
+profile: x-optimizer-agent
+
+description: >
+  XOptimizerAgent — đọc script draft, tạo post + thread X tối ưu theo tín hiệu
+  thuật toán Phoenix. Không link ở root post. Stage: OPTIMIZE.
+
+model:
+  default: deepseek/deepseek-chat
+
+toolsets:
+  - terminal
+
+skills:
+  - content-pipeline-x-optimizer
+  - content-pipeline-kanban
+
+memory:
+  enabled: true
+
+env:
+  - SUPABASE_URL
+  - SUPABASE_SERVICE_ROLE_KEY
+
+kanban:
+  assignee_name: x-optimizer-agent
+  stage: OPTIMIZE
+  blocked_by: script
+
+references:
+  - docs/09-x-algorithm-rules.md
+
+permissions:
+  supabase_read: [scripts, topics, pipeline_runs]
+  supabase_write: [x_posts]
+  forbidden: [scripts.body, topics, auto_post_x]
+
+contract: docs/AGENT-OS.md#10-xoptimizeragent

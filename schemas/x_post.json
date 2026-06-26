@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hermes-content-os/schemas/x_post.json",
+  "title": "x_posts",
+  "description": "Optimized X thread package — one row per script.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "script_id",
+    "main_post",
+    "thread",
+    "signals_applied",
+    "created_at"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "script_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "main_post": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Root post — must not contain external URLs (v1 gate)."
+    },
+    "thread": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      },
+      "description": "Ordered thread posts; link belongs in index 1."
+    },
+    "virality_score": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "maximum": 100
+    },
+    "signals_applied": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "reply_weight",
+        "author_reply_weight",
+        "no_root_external_link",
+        "link_placement",
+        "early_velocity_target_replies_15min",
+        "algorithm_version"
+      ],
+      "properties": {
+        "reply_weight": {
+          "type": "number"
+        },
+        "author_reply_weight": {
+          "type": "number"
+        },
+        "no_root_external_link": {
+          "type": "boolean"
+        },
+        "link_placement": {
+          "type": "string",
+          "enum": ["first_reply"]
+        },
+        "early_velocity_target_replies_15min": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "algorithm_version": {
+          "type": "string"
+        }
+      }
+    },
+    "suggested_post_time": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}
