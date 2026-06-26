@@ -1,6 +1,20 @@
 # Project Status — Snapshot
 
-**Cập nhật:** 2026-06-26 · Operator: Railway + Supabase live · Niche: `forex-gold-signals`
+**Cập nhật:** 2026-06-26 · Operator: Railway + Supabase live · Niche: `forex-gold-signals`  
+**Handoff máy khác:** [ops/HANDOFF.md](../ops/HANDOFF.md)
+
+---
+
+## Mới (2026-06-26) — Creator discovery
+
+| Mục | Trạng thái |
+|-----|------------|
+| Bảng `x_creators` + RLS | ✅ Supabase `hermes-growth` |
+| Unique X creators | ✅ **108** handles (8 quốc gia) |
+| Batch 1 ID | `88274469-fe50-44a7-a95e-3b2c85e02271` |
+| Skill research-agent Mode 2 | ✅ Sync Railway `/data/.hermes/skills/` |
+| ICP report trong repo | ❌ Chưa — chạy [x-creators-icp-analysis.md](../knowledge/prompts/x-creators-icp-analysis.md) |
+| GitHub | `f49e63b` — x_creators migration + prompts |
 
 ---
 
@@ -35,7 +49,8 @@
 
 ## Việc operator còn lại (go-live)
 
-1. [ ] Đăng ≥1 post X thủ công (`export_x_post.py`) → [ops/publish-log.md](../ops/publish-log.md)
+1. [ ] **ICP** từ 108 creators → lưu `ops/icp-forex-gold-signals.md`
+2. [ ] Đăng ≥1 post X thủ công (`export_x_post.py`) → [ops/publish-log.md](../ops/publish-log.md)
 2. [ ] Thứ Hai tới: xác nhận cron chạy (`pipeline_runs.trigger=cron`)
 3. [ ] Tuần 2: cron lần 2 → M8 đóng hẳn
 4. [ ] (Tuỳ chọn) Regenerate 4 x_posts cũ fail Phoenix

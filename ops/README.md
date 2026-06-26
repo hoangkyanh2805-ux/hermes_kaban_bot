@@ -8,5 +8,6 @@
 | [templates/PROJECT-BRIEF.md](templates/PROJECT-BRIEF.md) | Điền brief trước khi code |
 | [templates/content.yaml.template](templates/content.yaml.template) | Copy → `content.yaml` |
 | [publish-log.md](publish-log.md) | Ghi nhận đăng X thủ công |
+| [HANDOFF.md](HANDOFF.md) | Snapshot vận hành — đọc khi đổi máy |
 
 SOP: [knowledge/sops/SOP-OPS-BUNDLER.md](../knowledge/sops/SOP-OPS-BUNDLER.md)
