@@ -33,6 +33,20 @@ Complete catalog of Step 3 reusable assets.
 | 6 | [SOP-06-full-pipeline.md](sops/SOP-06-full-pipeline.md) | 7 |
 | 7 | [SOP-07-weekly-cron.md](sops/SOP-07-weekly-cron.md) | Bonus |
 | 8 | [SOP-08-hardening.md](sops/SOP-08-hardening.md) | — |
+| 9 | [SOP-09-manual-x-publish.md](sops/SOP-09-manual-x-publish.md) | Go-live |
+| **OPS** | **[SOP-OPS-BUNDLER.md](sops/SOP-OPS-BUNDLER.md)** | **Clone dự án mới** |
+
+---
+
+## OPS Bundler (clone template)
+
+| Asset | Path |
+|-------|------|
+| **Master guide** | [ops/OPS-BUNDLER.md](../ops/OPS-BUNDLER.md) |
+| Clone checklist | [ops/clone-checklist.md](../ops/clone-checklist.md) |
+| Project brief template | [ops/templates/PROJECT-BRIEF.md](../ops/templates/PROJECT-BRIEF.md) |
+| content.yaml template | [ops/templates/content.yaml.template](../ops/templates/content.yaml.template) |
+| Publish log | [ops/publish-log.md](../ops/publish-log.md) |
 
 ---
 

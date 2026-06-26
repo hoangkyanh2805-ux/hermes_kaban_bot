@@ -1,0 +1,62 @@
+# Hermes Content Pipeline — domain config TEMPLATE
+# Copy to repo root as content.yaml and customize.
+
+audience:
+  primary: "{AUDIENCE_SLUG}"           # e.g. forex-gold-signals, ai-automation-beginners
+  label: "{AUDIENCE_LABEL}"
+  description: >
+    {One paragraph describing who consumes the content.}
+
+research:
+  topic_count_default: 5
+  packages_produced_default: 2
+  search_queries:
+    - "{query 1}"
+    - "{query 2}"
+    - "{query 3}"
+    - "{query 4}"
+    - "{query 5}"
+  exclude_topics:
+    - "{topic to never research}"
+  tinyfish:
+    prefer_sources:
+      - "{domain1.com}"
+      - "{domain2.com}"
+  topics_row:
+    audience_field: "{AUDIENCE_SLUG}"
+
+script:
+  format: "{trading-signal|video|newsletter}"
+  structure_sections:
+    - "{section_1}"
+    - "{section_2}"
+    - "{section_3}"
+  voice: "{tone description}"
+
+x_optimizer:
+  thread_template:
+    - index: 0
+      role: hook
+      rules: "No URLs in root"
+    - index: 1
+      role: source_link
+      rules: "Primary source URL here"
+    - index: 2
+      role: analysis
+      rules: "Main insight"
+    - index: 3
+      role: cta
+      rules: "Engagement question or CTA"
+  niche_hashtags_optional:
+    - "{tag1}"
+
+pipeline:
+  board_slug: content-os
+  weekly_cron: "0 7 * * 1"
+  timezone: "{IANA timezone}"
+
+agents:
+  research: research-agent
+  script: script-agent
+  x_optimizer: x-optimizer-agent
+  storage: storage-agent

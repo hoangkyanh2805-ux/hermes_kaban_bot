@@ -15,6 +15,7 @@ Faithful reproduction of the [Derek Cheung Hermes Kanban content pipeline tutori
 | 8 | Weekly cron | [runbooks/08-weekly-cron.md](runbooks/08-weekly-cron.md) |
 | publish | **Manual X (v1)** | [docs/12-manual-x-publish.md](docs/12-manual-x-publish.md) · `scripts/export_x_post.py` |
 | domain | **Audience config** | [content.yaml](content.yaml) · `forex-gold-signals` |
+| **clone** | **OPS Bundler** | [ops/OPS-BUNDLER.md](ops/OPS-BUNDLER.md) · fork → dự án mới |
 | ops | Gateway 24/7 | [runbooks/09-gateway-hardening.md](runbooks/09-gateway-hardening.md) |
 | 1 | Profiles | [profiles/](profiles/) |
 
