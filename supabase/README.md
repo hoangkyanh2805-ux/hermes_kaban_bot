@@ -7,7 +7,9 @@ DDL source of truth for the four pipeline tables. Spec: [docs/06-supabase-schema
 | File | Purpose |
 |------|---------|
 | `migrations/001_content_pipeline.sql` | Tables, FKs, indexes, CHECK constraints |
+| `migrations/002_x_creators.sql` | X creator discovery table (optional ad-hoc research) |
 | `policies/rls_agent_ownership.sql` | RLS per agent role ([AGENT-OS §7](../docs/AGENT-OS.md)) |
+| `policies/rls_x_creators.sql` | RLS for `x_creators` (apply after 002) |
 | `../schemas/*.json` | JSON Schema for row validation in agents/tests |
 
 ## Quick apply (Supabase Dashboard)
@@ -16,7 +18,8 @@ DDL source of truth for the four pipeline tables. Spec: [docs/06-supabase-schema
 2. Open **SQL Editor** → **New query**.
 3. Paste and run **`migrations/001_content_pipeline.sql`** → Success.
 4. Paste and run **`policies/rls_agent_ownership.sql`** → Success.
-5. **Table Editor** → confirm: `pipeline_runs`, `topics`, `scripts`, `x_posts`.
+5. (Tuỳ chọn — creator research) Paste and run **`migrations/002_x_creators.sql`** → **`policies/rls_x_creators.sql`**.
+6. **Table Editor** → confirm: `pipeline_runs`, `topics`, `scripts`, `x_posts` (+ `x_creators` nếu đã chạy 002).
 6. Copy **Project URL** + **service role key** → Railway Variables:
    - `SUPABASE_URL`
    - `SUPABASE_SERVICE_ROLE_KEY`
@@ -80,7 +83,7 @@ Agent ownership matrix (who may write what):
 
 | Agent | Tables (write) |
 |-------|----------------|
-| research-agent | `topics`; `pipeline_runs.started_at` only |
+| research-agent | `topics`; `x_creators`; `pipeline_runs.started_at` only |
 | script-agent | `scripts` |
 | x-optimizer-agent | `x_posts` |
 | storage-agent | `pipeline_runs` |

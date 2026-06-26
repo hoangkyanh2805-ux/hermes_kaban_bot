@@ -29,6 +29,26 @@ research:
   topics_row:
     audience_field: "forex-gold-signals"
 
+  creator_research:
+    niche: forex-gold-signals
+    accounts_per_country_target: 15
+    countries:
+      - Canada
+      - Italy
+      - Germany
+      - United Arab Emirates
+      - France
+      - Saudi Arabia
+      - United Kingdom
+      - Poland
+    search_query_template: "{niche_keyword} {country} site:x.com"
+    niche_keywords:
+      - top forex twitter creators
+      - gold trading influencer
+      - XAUUSD trader
+    supabase_table: x_creators
+    idempotency_key: "(research_batch_id, handle)"
+
 script:
   format: trading-signal
   structure_sections:

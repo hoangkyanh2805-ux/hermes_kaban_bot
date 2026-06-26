@@ -174,17 +174,28 @@ def verify(
     min_topics: int = 1,
     min_scripts: int = 1,
     min_x_posts: int = 1,
+    min_creators: int = 0,
     strict_phoenix: bool = True,
+    creators_only: bool = False,
 ) -> VerifyReport:
     report = VerifyReport()
 
-    tables = ("pipeline_runs", "topics", "scripts", "x_posts")
+    tables: tuple[str, ...] = (
+        ("x_creators",) if creators_only else ("pipeline_runs", "topics", "scripts", "x_posts", "x_creators")
+    )
     counts: dict[str, int] = {}
     for table in tables:
         try:
             rows = supabase_get(base_url, service_key, table, select="id")
             counts[table] = len(rows)
         except urllib.error.HTTPError as exc:
+            if table == "x_creators" and exc.code in (400, 404):
+                counts[table] = 0
+                if creators_only or min_creators > 0:
+                    report.add("table:x_creators", False, "table missing — run migration 002")
+                    if creators_only:
+                        return report
+                continue
             report.add(f"table:{table}", False, f"HTTP {exc.code}")
             return report
         except OSError as exc:
@@ -192,10 +203,43 @@ def verify(
             return report
 
     report.add("supabase_connect", True, base_url)
+
+    if creators_only:
+        report.add(
+            "x_creators",
+            counts.get("x_creators", 0) >= min_creators,
+            f"count={counts.get('x_creators', 0)} (min {min_creators})",
+        )
+        if counts.get("x_creators", 0) > 0:
+            creators = supabase_get(
+                base_url,
+                service_key,
+                "x_creators",
+                select="country,handle,profile_url,research_batch_id",
+                limit=200,
+            )
+            bad_url = [
+                c for c in creators
+                if not re.match(r"^https?://(www\.)?(x\.com|twitter\.com)/", c.get("profile_url") or "", re.I)
+            ]
+            report.add(
+                "x_creators_profile_urls",
+                len(bad_url) == 0,
+                f"{len(creators) - len(bad_url)}/{len(creators)} valid profile_url",
+            )
+        return report
+
     report.add("pipeline_runs", counts["pipeline_runs"] >= 1, f"count={counts['pipeline_runs']}")
     report.add("topics", counts["topics"] >= min_topics, f"count={counts['topics']} (min {min_topics})")
     report.add("scripts", counts["scripts"] >= min_scripts, f"count={counts['scripts']} (min {min_scripts})")
     report.add("x_posts", counts["x_posts"] >= min_x_posts, f"count={counts['x_posts']} (min {min_x_posts})")
+
+    if min_creators > 0 or counts.get("x_creators", 0) > 0:
+        report.add(
+            "x_creators",
+            counts.get("x_creators", 0) >= min_creators,
+            f"count={counts.get('x_creators', 0)} (min {min_creators})",
+        )
 
     runs = supabase_get(
         base_url,
@@ -254,6 +298,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--min-topics", type=int, default=1)
     parser.add_argument("--min-scripts", type=int, default=1)
     parser.add_argument("--min-x-posts", type=int, default=1)
+    parser.add_argument("--min-creators", type=int, default=0)
+    parser.add_argument(
+        "--creators",
+        action="store_true",
+        help="Verify x_creators table only (skip pipeline/phoenix gates)",
+    )
     parser.add_argument(
         "--relaxed-phoenix",
         action="store_true",
@@ -271,7 +321,9 @@ def main(argv: list[str] | None = None) -> int:
         min_topics=args.min_topics,
         min_scripts=args.min_scripts,
         min_x_posts=args.min_x_posts,
+        min_creators=args.min_creators,
         strict_phoenix=not args.relaxed_phoenix,
+        creators_only=args.creators,
     )
     report.print_report()
     return 0 if report.passed else 1

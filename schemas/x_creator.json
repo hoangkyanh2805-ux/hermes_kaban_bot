@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hermes-content-os/schemas/x_creator.json",
+  "title": "x_creators",
+  "description": "X/Twitter creator discovered via TinyFish creator-research task.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "research_batch_id",
+    "country",
+    "handle",
+    "profile_url",
+    "niche",
+    "source_urls",
+    "created_at"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "research_batch_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "pipeline_run_id": {
+      "type": ["string", "null"],
+      "format": "uuid"
+    },
+    "country": {
+      "type": "string",
+      "minLength": 1
+    },
+    "handle": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[^@\\s]+$"
+    },
+    "display_name": {
+      "type": ["string", "null"]
+    },
+    "followers_estimate": {
+      "type": ["integer", "null"],
+      "minimum": 0
+    },
+    "bio_snippet": {
+      "type": ["string", "null"]
+    },
+    "profile_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://(www\\.)?(x\\.com|twitter\\.com)/"
+    },
+    "why_relevant": {
+      "type": ["string", "null"]
+    },
+    "niche": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_urls": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    "discovered_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

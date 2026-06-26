@@ -12,6 +12,7 @@ Sau M2 (Kanban + profiles). Tạo 4 bảng Postgres + RLS trên Supabase, rồi 
 - [ ] Migration `001_content_pipeline.sql` chạy thành công
 - [ ] RLS `rls_agent_ownership.sql` chạy thành công
 - [ ] 4 bảng: `pipeline_runs`, `topics`, `scripts`, `x_posts`
+- [ ] (Tuỳ chọn) `002_x_creators.sql` + `rls_x_creators.sql` — tìm creator X theo quốc gia
 - [ ] `x_posts.signals_applied` kiểu JSONB NOT NULL
 - [ ] `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` trên Railway
 - [ ] (Tuỳ chọn) Supabase skill cài trên Hermes
@@ -38,6 +39,14 @@ Trong Supabase Dashboard:
 5. Copy toàn bộ → **Run**.
 
 Nếu lỗi "already exists" khi chạy lại — bảng đã có; chỉ cần verify Bước 3.
+
+### Bước 2b — X creators (tuỳ chọn)
+
+Nếu cần lưu danh sách creator X theo quốc gia:
+
+1. SQL Editor → chạy `supabase/migrations/002_x_creators.sql`
+2. Chạy `supabase/policies/rls_x_creators.sql`
+3. Prompt Telegram: [knowledge/prompts/research-x-creators.md](../knowledge/prompts/research-x-creators.md)
 
 Chi tiết: [supabase/README.md](../supabase/README.md)
 

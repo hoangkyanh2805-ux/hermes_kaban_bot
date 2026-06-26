@@ -139,6 +139,78 @@ supabase: inserted 5 topics
 
 ---
 
+## Creator discovery mode (optional)
+
+**Trigger:** Kanban card or Telegram one-off — see [knowledge/prompts/research-x-creators.md](../../knowledge/prompts/research-x-creators.md).
+
+**Not** the weekly topic pipeline — do **not** insert `topics` rows.
+
+### Inputs
+
+| Input | Source | Required |
+|-------|--------|----------|
+| `research_batch_id` | Agent generates UUID once per task | Yes |
+| Countries | Task body or [content.yaml](../../content.yaml) `creator_research.countries` | Yes |
+| `niche` | Default `forex-gold-signals` | No |
+| `pipeline_run_id` | Optional link to weekly run | No |
+
+### Outputs
+
+| Output | Destination |
+|--------|-------------|
+| `x_creators` rows | Supabase |
+| Summary by country | `kanban_complete --result` or Telegram |
+
+**Result line format:** `creators: batch={uuid} total={n} top_countries={ca,uk,...}`
+
+### Workflow
+
+```text
+generate research_batch_id
+→ TinyFish search (≥1 query per country)
+→ validate profile_url is real x.com/twitter.com link from search
+→ INSERT x_creators (skip duplicate handle in batch)
+→ report counts per country
+```
+
+### Example `x_creators` row
+
+```json
+{
+  "research_batch_id": "abc-123",
+  "country": "Canada",
+  "handle": "exampletrader",
+  "display_name": "Example Trader",
+  "followers_estimate": 12500,
+  "bio_snippet": "XAUUSD / gold macro threads",
+  "profile_url": "https://x.com/exampletrader",
+  "why_relevant": "Posts daily gold levels and breakout setups",
+  "niche": "forex-gold-signals",
+  "source_urls": ["https://...", "https://..."]
+}
+```
+
+### Failure cases (creator mode)
+
+| Failure | Action |
+|---------|--------|
+| Table `x_creators` missing | `kanban_block` — run migration 002 first |
+| 0 rows after all countries | `kanban_block` — widen queries once, then block |
+| Invented handle (no search evidence) | Skip row; comment violation |
+| Duplicate handle in batch | Skip (idempotent) |
+
+---
+
+## Testing checklist (creator mode)
+
+- [ ] Migration `002_x_creators.sql` applied on Supabase
+- [ ] ≥10 `x_creators` rows for smoke test
+- [ ] Every `profile_url` resolves to x.com or twitter.com
+- [ ] `source_urls` non-empty for spot-checked rows
+- [ ] No rows in `topics` from creator-only task
+
+---
+
 ## Documentation
 
 | Reference | Path |

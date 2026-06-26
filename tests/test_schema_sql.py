@@ -7,10 +7,13 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 MIGRATION = REPO_ROOT / "supabase" / "migrations" / "001_content_pipeline.sql"
+MIGRATION_X_CREATORS = REPO_ROOT / "supabase" / "migrations" / "002_x_creators.sql"
 RLS_POLICIES = REPO_ROOT / "supabase" / "policies" / "rls_agent_ownership.sql"
+RLS_X_CREATORS = REPO_ROOT / "supabase" / "policies" / "rls_x_creators.sql"
 SCHEMAS_DIR = REPO_ROOT / "schemas"
 
 REQUIRED_TABLES = ("pipeline_runs", "topics", "scripts", "x_posts")
+OPTIONAL_TABLES = ("x_creators",)
 REQUIRED_INDEXES = (
     "idx_topics_run_score",
     "idx_scripts_topic",
@@ -22,6 +25,7 @@ REQUIRED_SCHEMA_FILES = (
     "topic.json",
     "script.json",
     "x_post.json",
+    "x_creator.json",
 )
 
 
@@ -87,6 +91,23 @@ class TestSchemaSql(unittest.TestCase):
         required = schema["properties"]["signals_applied"]["required"]
         self.assertIn("algorithm_version", required)
         self.assertIn("no_root_external_link", required)
+
+    def test_x_creators_migration_file_exists(self) -> None:
+        self.assertTrue(MIGRATION_X_CREATORS.is_file(), f"Missing migration: {MIGRATION_X_CREATORS}")
+
+    def test_x_creators_migration_contains_table(self) -> None:
+        sql = MIGRATION_X_CREATORS.read_text(encoding="utf-8").lower()
+        self.assertIn("create table", sql)
+        self.assertIn("public.x_creators", sql)
+        self.assertIn("x_creators_batch_handle_unique", sql)
+
+    def test_x_creators_rls_policies_file_exists(self) -> None:
+        self.assertTrue(RLS_X_CREATORS.is_file(), f"Missing RLS: {RLS_X_CREATORS}")
+
+    def test_x_creators_rls_enables_row_security(self) -> None:
+        sql = RLS_X_CREATORS.read_text(encoding="utf-8").lower()
+        self.assertIn("alter table public.x_creators enable row level security", sql)
+        self.assertIn("x_creators_insert_research", sql)
 
 
 if __name__ == "__main__":
