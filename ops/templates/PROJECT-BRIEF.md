@@ -73,6 +73,8 @@ _Mô tả pipeline làm gì, cho ai, output cuối là gì._
 
 ## 7. Secrets (KHÔNG commit)
 
+→ Chi tiết từng bước: [CREDENTIALS-AND-KEYS.md](../CREDENTIALS-AND-KEYS.md)
+
 | Variable | Nơi set |
 |----------|---------|
 | `DEEPSEEK_API_KEY` | Railway + `/data/.env` |
