@@ -2,6 +2,8 @@
 
 **Gói vận hành** tổng hợp Step 1 → 2 → 3 + triển khai thực tế (Railway → Supabase → cron → đăng X thủ công).
 
+**Factory workflow (video → 3 skill):** [../factory/WORKFLOW.md](../factory/WORKFLOW.md)
+
 Dùng repo này làm **template**. Dự án mới = fork + điền brief + đổi niche trong `content.yaml`.
 
 ---

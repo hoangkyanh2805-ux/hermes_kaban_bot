@@ -50,6 +50,17 @@ Complete catalog of Step 3 reusable assets.
 
 ---
 
+## Factory workflow (idea → 3 skills → build)
+
+| Asset | Path |
+|-------|------|
+| **End-to-end workflow** | [factory/WORKFLOW.md](../factory/WORKFLOW.md) |
+| Skill map | [factory/SKILL-MAP.md](../factory/SKILL-MAP.md) |
+| Artifact map | [factory/ARTIFACT-MAP.md](../factory/ARTIFACT-MAP.md) |
+| Step prompts | [factory/steps/](../factory/steps/) |
+
+---
+
 ## Prompt templates
 
 | Template | Path | Use when |
