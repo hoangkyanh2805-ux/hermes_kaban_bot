@@ -9,6 +9,7 @@ Dùng sau khi fork [hermes_kaban_bot](https://github.com/hoangkyanh2805-ux/herme
 ## Phase 0 — Brief & rename
 
 - [ ] Copy [templates/PROJECT-BRIEF.md](templates/PROJECT-BRIEF.md) → `ops/PROJECT-BRIEF-{slug}.md`
+- [ ] **[CREDENTIALS-AND-KEYS.md](CREDENTIALS-AND-KEYS.md)** — đọc trước khi deploy
 - [ ] Điền: tên project, niche, audience, nguồn research, timezone cron
 - [ ] Copy [templates/content.yaml.template](templates/content.yaml.template) → `content.yaml`
 - [ ] Cập nhật `README.md` (1 đoạn mô tả niche)

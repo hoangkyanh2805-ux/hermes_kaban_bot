@@ -65,9 +65,10 @@ flowchart TB
 
 → [steps/00-idea-to-brief.md](steps/00-idea-to-brief.md)
 
-- Xem video gốc, ghi chú architecture
-- Brainstorm niche (vd. AI automation → forex/gold)
-- Không code
+### Step 0b — API Keys & Supabase (operator)
+
+→ [steps/00b-credentials-and-keys.md](steps/00b-credentials-and-keys.md)  
+→ **[ops/CREDENTIALS-AND-KEYS.md](../ops/CREDENTIALS-AND-KEYS.md)** — DeepSeek, Telegram, Supabase, TinyFish, Railway, `/data/.env`
 
 ### Step 1 — Project Kickstart OS
 

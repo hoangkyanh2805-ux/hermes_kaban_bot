@@ -11,6 +11,7 @@ Quy trình meta dùng để **tái tạo** pipeline kiểu Derek Cheung (hoặc 
 | Bạn đang ở | Đọc |
 |------------|-----|
 | Có video / idea thô | [WORKFLOW.md](WORKFLOW.md) → Step 0 |
+| **Cần lấy API / điền key** | **[../ops/CREDENTIALS-AND-KEYS.md](../ops/CREDENTIALS-AND-KEYS.md)** |
 | Sẵn sàng chạy 3 skill | [steps/](steps/) |
 | Đã xong Step 1–3, cần deploy | [../ops/OPS-BUNDLER.md](../ops/OPS-BUNDLER.md) |
 | Clone sang niche mới | [../ops/clone-checklist.md](../ops/clone-checklist.md) |
@@ -27,6 +28,7 @@ factory/
 ├── ARTIFACT-MAP.md           ← Step → file trong repo
 └── steps/
     ├── 00-idea-to-brief.md
+    ├── 00b-credentials-and-keys.md   ← API, Supabase, Railway keys
     ├── 01-project-kickstart-os.md
     ├── 02-agent-os-designer.md
     ├── 03-knowledge-asset-factory.md
